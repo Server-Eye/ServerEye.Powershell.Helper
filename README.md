@@ -1,92 +1,373 @@
-# PowerShell Helper
+# Server-Eye PowerShell Helper
 
 
 
-## Getting started
+This module provides easy access to the Server-Eye API. All API calls are supported. See https://api.server-eye.de/docs/2 for the corresponding cmdlet for each API function.
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
 
-## Add your files
+## Namespaces
+All functions for directly accessing the Server-Eye API are in the namespace ```SeApi```.
 
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/ee/gitlab-basics/add-file.html#add-a-file-using-the-command-line) or push an existing Git repository with the following command:
+
+
+#### Example
+* Get-**SeApi**ContainerAgentList
+* Get-**SeApi**Me
+
+
+
+Those functions are direct representations of the Server-Eye REST API.
+
+
+
+Functions in the namespace ```SE``` make it easier to retrieve and edit objects. Those functions provide a more natural PowerShell look and feel.
+
+
+
+#### Example
+* Get-**SE**Customer "MyCusto*"
+* Connect-**SE**Session -Persist
+
+
+
+Both namespaces are available after installing this module and can be used simultaneously.
+
+
+
+
+## How to install
+The module should be installed directly from the Microsoft Powershell Gallery (https://www.powershellgallery.com/).
+
+
+
+If you are running PowerShell 5 or higher you can use the ```Install-Module``` command without further setup.  
+
+
+
+If you use PowerShell 3 or 4, please follow the instructions at http://go.microsoft.com/fwlink/?LinkID=746217&clcid=0x409 to install the required extension.
+
+
+
+Now install the Module:
+```powershell
+Install-Module -Name ServerEye.Powershell.Helper -Scope CurrentUser
+```
+
+
+
+## How to use the module
+The module provides functions to interact with the Server-Eye API. Authentication can be done via login or api key.
+
+
+
+### Load the Module
+Before you can use the module in your scripts it has to be loaded. Either manually by you or automatically.
+```powershell
+# Manual import
+Import-Module -Name ServerEye.Powershell.Helper
+```
+
+
+
+
+### API Key
+You can call the Get functions directly with an API key. A login is not needed.
+```powershell
+Get-SeApiMyNodesList -ApiKey "123-456-ABC-DEF"
+```
+
+
+
+### Login with Username and Password
+API keys should only be used in automated processes. Using an API key in an interactive console session is not advised.
+
+
+
+In those situations you can use a Server-Eye session to authenticate yourself.
+```powershell
+$session = Connect-SESession
+# This will ask you for username and password
+Get-SeApiMyNodesList -Session $session
+Get-SeApiMe -Session $session
+
+
 
 ```
-cd existing_repo
-git remote add origin https://gitlab.server-eye.cloud/powershell/powershell-helper.git
-git branch -M main
-git push -uf origin main
+
+
+
+It is possible to save the current session in the active PowerShell session. Calls to functions in the SE namespace will read the session stored in the PowerShell.
+```powershell
+Connect-SESession -Persist
+# This will ask you for username and password
+
+
+
+# The session does not need to be passed to the cmdlet
+Get-SECustomer "Systemmanger IT"
+
+
+
 ```
 
-## Integrate with your tools
 
-- [ ] [Set up project integrations](https://gitlab.server-eye.cloud/powershell/powershell-helper/-/settings/integrations)
 
-## Collaborate with your team
 
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Automatically merge when pipeline succeeds](https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
+### Logout
+If the session was saved in a variable, you should destroy the session when you are done.
+```powershell
+# Disconnect an explicit session
+Disconnect-SESession -Session $session
 
-## Test and Deploy
 
-Use the built-in continuous integration in GitLab.
 
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/index.html)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing(SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
+# Disconnect the global session
+Disconnect-SESession
+```
 
-***
 
-# Editing this README
 
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thank you to [makeareadme.com](https://www.makeareadme.com/) for this template.
+### Available Cmdlets
+#### SE Namespace
+* Connect-SESession                                 
+* Convert-SEDBTime                                  
+* Disconnect-SESession                              
+* Get-SEAgenttype                                   
+* Get-SEConnectorState                              
+* Get-SEContainer                                   
+* Get-SEContainerInventory                          
+* Get-SEContainerState            
+* Get-SECustomer                  
+* Get-SECustomerapiKey            
+* Get-SECustomerManager           
+* Get-SECustomerProperties        
+* Get-SECustomerSecret            
+* Get-SECustomerSetting           
+* Get-SEDispatchTime              
+* Get-SEDuplicatedSensorhub       
+* Get-SEGroupMember               
+* Get-SEInstaller                 
+* Get-SEInventory                 
+* Get-SENote                      
+* Get-SENotification              
+* Get-SEOCCConnector              
+* Get-SEScheduledTask             
+* Get-SESensor                    
+* Get-SESensorcount               
+* Get-SESensorhub                 
+* Get-SESensorhubProposal         
+* Get-SESensorhubState            
+* Get-SESensorhubtag              
+* Get-SESensorInvoice             
+* Get-SESensorSetting             
+* Get-SESensorState               
+* Get-SESensortag                 
+* Get-SESUCategories              
+* Get-SETag                       
+* Get-SETemplate                  
+* Get-SEUser                      
+* Get-SEVault                     
+* Get-SEVaultList                 
+* Import-SEVaultEntries           
+* New-SEAPIKEY                    
+* New-SEAuthCacheToken            
+* New-SECustomer                  
+* New-SECustomerProperty          
+* New-SEGroup                     
+* New-SENote                      
+* New-SENotification              
+* New-SESensor                    
+* New-SETag                       
+* New-SEVault                     
+* New-SEVaultEntry                
+* Remove-SEConnector              
+* Remove-SEContainer              
+* Remove-SEManager                
+* Remove-SENote                   
+* Remove-SENotification           
+* Remove-SESensor                 
+* Remove-SESensorhub              
+* Remove-SETag                    
+* Remove-SEVault                  
+* Restart-SEContainer             
+* Restart-SEOCCConnector          
+* Restart-SESensor                
+* Restart-SESensorhub             
+* Set-SECustomerSetting           
+* Set-SEManager                   
+* Set-SENotification              
+* Set-SESensor                    
+* Set-SESensorSetting             
+* Set-SESensorState               
+* Set-SESensorTag                 
+* Set-SETag                       
+* Set-SETemplate                  
+* Test-SEAuth                     
+* Update-SEHelper                 
+* Update-SEVaultUser
 
-## Suggestions for a good README
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
 
-## Name
-Choose a self-explaining name for your project.
 
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
-
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
-
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
-
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
-
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
-
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
-
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
-
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
-
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
-
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
-
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
-
-## License
-For open source projects, say how it is licensed.
-
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+#### SeApi Namespace
+* Get-SeApiActionlogList
+* Get-SeApiAgent
+* Get-SeApiAgentActionlogList
+* Get-SeApiAgentCategoryList
+* Get-SeApiAgentChart
+* Get-SeApiAgentNoteList
+* Get-SeApiAgentNotificationList
+* Get-SeApiAgentRemoteSetting
+* Get-SeApiAgentSettingList
+* Get-SeApiAgentStateList
+* Get-SeApiAgentStateListbulk
+* Get-SeApiAgentTagList
+* Get-SeApiAgentTypeList
+* Get-SeApiAgentTypeSettingList
+* Get-SeApiContainer
+* Get-SeApiContainerActionlogList
+* Get-SeApiContainerAgentList
+* Get-SeApiContainerInventory
+* Get-SeApiContainerNoteList
+* Get-SeApiContainerNotificationList
+* Get-SeApiContainerProposalList
+* Get-SeApiContainerProposalSettingList
+* Get-SeApiContainerStateList
+* Get-SeApiContainerStateListbulk
+* Get-SeApiContainerTagList
+* Get-SeApiCustomer
+* Get-SeApiCustomerApikey
+* Get-SeApiCustomerApikeyList
+* Get-SeApiCustomerBucketList
+* Get-SeApiCustomerBucketUserList
+* Get-SeApiCustomerContainerList
+* Get-SeApiCustomerDispatchtimeList
+* Get-SeApiCustomerList
+* Get-SeApiCustomerLocation
+* Get-SeApiCustomerManagerList
+* Get-SeApiCustomerSettingList
+* Get-SeApiCustomerTagList
+* Get-SeApiCustomerTemplateAgentList
+* Get-SeApiCustomerTemplateList
+* Get-SeApiCustomerUsage
+* Get-SeApiCustomerUsageList
+* Get-SeApiCustomerViewfilterList
+* Get-SeApiGroup
+* Get-SeApiGroupList
+* Get-SeApiGroupUserList
+* Get-SeApiKey
+* Get-SeApiMe
+* Get-SeApiMyCustomer
+* Get-SeApiMyFeedList
+* Get-SeApiMyLocation
+* Get-SeApiMyMobilepush
+* Get-SeApiMyMobilepushList
+* Get-SeApiMyNodesList
+* Get-SeApiMyNotificationList
+* Get-SeApiMySetting
+* Get-SeApiMyTwofactor
+* Get-SeApiMyTwofactorSecret
+* Get-SeApiNetworkSystemInstallstatusList
+* Get-SeApiNetworkSystemList
+* Get-SeApiPcvisit
+* Get-SeApiPcvisitCheck
+* Get-SeApiReportingCustomReport
+* Get-SeApiReportingCustomReportList
+* Get-SeApiReportingTemplate
+* Get-SeApiReportingTemplateList
+* Get-SeApiRoleList
+* Get-SeApiUser
+* Get-SeApiUserGroupList
+* Get-SeApiUserList
+* Get-SeApiUserLocation
+* Get-SeApiUserSettingList
+* New-SeApiAgent
+* New-SeApiAgentCopy
+* New-SeApiAgentNote
+* New-SeApiAgentNotification
+* New-SeApiAgentStateHint
+* New-SeApiAgentTag
+* New-SeApiApiKey
+* New-SeApiContainerNote
+* New-SeApiContainerNotification
+* New-SeApiContainerStateHint
+* New-SeApiContainerTag
+* New-SeApiCustomer
+* New-SeApiCustomerBucket
+* New-SeApiCustomerCoupon
+* New-SeApiCustomerDispatchtime
+* New-SeApiCustomerLocation
+* New-SeApiCustomerTag
+* New-SeApiCustomerViewfilter
+* New-SeApiGroup
+* New-SeApiLogin
+* New-SeApiLogout
+* New-SeApiMyLocation
+* New-SeApiMyMobilepush
+* New-SeApiMyTwofactor
+* New-SeApiNetworkSystem
+* New-SeApiPcivistStart
+* New-SeApiReportingCustomReport
+* New-SeApiReportingTemplate
+* New-SeApiReset
+* New-SeApiTemplate
+* New-SeApiUser
+* New-SeApiUserLocation
+* Read-SeApiCustomerBucket
+* Remove-SeApiAgent
+* Remove-SeApiAgentNote
+* Remove-SeApiAgentNotification
+* Remove-SeApiAgentTag
+* Remove-SeApiContainer
+* Remove-SeApiContainerNote
+* Remove-SeApiContainerNotification
+* Remove-SeApiContainerProposal
+* Remove-SeApiContainerTag
+* Remove-SeApiCustomerApikey
+* Remove-SeApiCustomerBucket
+* Remove-SeApiCustomerBucketUser
+* Remove-SeApiCustomerDispatchtime
+* Remove-SeApiCustomerManager
+* Remove-SeApiCustomerTag
+* Remove-SeApiCustomerTemplate
+* Remove-SeApiCustomerTemplateAgent
+* Remove-SeApiCustomerViewfilter
+* Remove-SeApiGroup
+* Remove-SeApiGroupUser
+* Remove-SeApiMyMobilepush
+* Remove-SeApiMyNotification
+* Remove-SeApiMyTwofactor
+* Remove-SeApiReportingCustomReport
+* Remove-SeApiReportingTemplate
+* Remove-SeApiUser
+* Remove-SeApiUserGroup
+* Remove-SeApiUserSubstitude
+* Remove-SeApiUserTwofactor
+* Restart-SeApiContainer
+* Set-SeApiAgent
+* Set-SeApiAgentNotification
+* Set-SeApiAgentSetting
+* Set-SeApiContainer
+* Set-SeApiContainerNotification
+* Set-SeApiContainerProposal
+* Set-SeApiCustomer
+* Set-SeApiCustomerBucket
+* Set-SeApiCustomerBucketUser
+* Set-SeApiCustomerDispatchtime
+* Set-SeApiCustomerManager
+* Set-SeApiCustomerSetting
+* Set-SeApiCustomerTag
+* Set-SeApiCustomerViewfilter
+* Set-SeApiGroup
+* Set-SeApiGroupUser
+* Set-SeApiMyNotification
+* Set-SeApiMySetting
+* Set-SeApiReportingTemplate
+* Set-SeApiTemplate
+* Set-SeApiUser
+* Set-SeApiUserGroup
+* Set-SeApiUserSetting
+* Set-SeApiUserSettingKey
+* Set-SeApiUserSubstitude
+* Start-SeApiContainer
+* Stop-SeApiContainer
