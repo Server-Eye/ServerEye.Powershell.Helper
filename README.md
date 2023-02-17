@@ -1,65 +1,39 @@
 # Server-Eye PowerShell Helper
 
-
-
-This module provides easy access to the Server-Eye API. All API calls are supported. See https://api.server-eye.de/docs/2 for the corresponding cmdlet for each API function.
-
-
+This module provides easy access to the Server-Eye API. All API calls are supported. See https://api.server-eye.de/docs/2 for the corresponding cmdlet for each API function. 
 
 ## Namespaces
-All functions for directly accessing the Server-Eye API are in the namespace ```SeApi```.
-
-
+All functions for directly accessing the Server-Eye API are in the namespace ```SeApi```. 
 
 #### Example
 * Get-**SeApi**ContainerAgentList
 * Get-**SeApi**Me
 
+Those functions are direct representations of the Server-Eye REST API. 
 
-
-Those functions are direct representations of the Server-Eye REST API.
-
-
-
-Functions in the namespace ```SE``` make it easier to retrieve and edit objects. Those functions provide a more natural PowerShell look and feel.
-
-
+Functions in the namespace ```SE``` make it easier to retrieve and edit objects. Those functions provide a more natural PowerShell look and feel. 
 
 #### Example
 * Get-**SE**Customer "MyCusto*"
 * Connect-**SE**Session -Persist
 
-
-
 Both namespaces are available after installing this module and can be used simultaneously.
-
-
 
 
 ## How to install
 The module should be installed directly from the Microsoft Powershell Gallery (https://www.powershellgallery.com/).
 
-
-
 If you are running PowerShell 5 or higher you can use the ```Install-Module``` command without further setup.  
 
-
-
 If you use PowerShell 3 or 4, please follow the instructions at http://go.microsoft.com/fwlink/?LinkID=746217&clcid=0x409 to install the required extension.
-
-
 
 Now install the Module:
 ```powershell
 Install-Module -Name ServerEye.Powershell.Helper -Scope CurrentUser
-```
-
-
+``` 
 
 ## How to use the module
-The module provides functions to interact with the Server-Eye API. Authentication can be done via login or api key.
-
-
+The module provides functions to interact with the Server-Eye API. Authentication can be done via login or api key. 
 
 ### Load the Module
 Before you can use the module in your scripts it has to be loaded. Either manually by you or automatically.
@@ -69,20 +43,14 @@ Import-Module -Name ServerEye.Powershell.Helper
 ```
 
 
-
-
 ### API Key
 You can call the Get functions directly with an API key. A login is not needed.
 ```powershell
 Get-SeApiMyNodesList -ApiKey "123-456-ABC-DEF"
 ```
 
-
-
 ### Login with Username and Password
-API keys should only be used in automated processes. Using an API key in an interactive console session is not advised.
-
-
+API keys should only be used in automated processes. Using an API key in an interactive console session is not advised. 
 
 In those situations you can use a Server-Eye session to authenticate yourself.
 ```powershell
@@ -91,27 +59,17 @@ $session = Connect-SESession
 Get-SeApiMyNodesList -Session $session
 Get-SeApiMe -Session $session
 
-
-
 ```
-
-
 
 It is possible to save the current session in the active PowerShell session. Calls to functions in the SE namespace will read the session stored in the PowerShell.
 ```powershell
 Connect-SESession -Persist
 # This will ask you for username and password
 
-
-
 # The session does not need to be passed to the cmdlet
 Get-SECustomer "Systemmanger IT"
 
-
-
 ```
-
-
 
 
 ### Logout
@@ -120,94 +78,23 @@ If the session was saved in a variable, you should destroy the session when you 
 # Disconnect an explicit session
 Disconnect-SESession -Session $session
 
-
-
 # Disconnect the global session
 Disconnect-SESession
 ```
 
-
-
 ### Available Cmdlets
 #### SE Namespace
-* Connect-SESession                                 
-* Convert-SEDBTime                                  
-* Disconnect-SESession                              
-* Get-SEAgenttype                                   
-* Get-SEConnectorState                              
-* Get-SEContainer                                   
-* Get-SEContainerInventory                          
-* Get-SEContainerState            
-* Get-SECustomer                  
-* Get-SECustomerapiKey            
-* Get-SECustomerManager           
-* Get-SECustomerProperties        
-* Get-SECustomerSecret            
-* Get-SECustomerSetting           
-* Get-SEDispatchTime              
-* Get-SEDuplicatedSensorhub       
-* Get-SEGroupMember               
-* Get-SEInstaller                 
-* Get-SEInventory                 
-* Get-SENote                      
-* Get-SENotification              
-* Get-SEOCCConnector              
-* Get-SEScheduledTask             
-* Get-SESensor                    
-* Get-SESensorcount               
-* Get-SESensorhub                 
-* Get-SESensorhubProposal         
-* Get-SESensorhubState            
-* Get-SESensorhubtag              
-* Get-SESensorInvoice             
-* Get-SESensorSetting             
-* Get-SESensorState               
-* Get-SESensortag                 
-* Get-SESUCategories              
-* Get-SETag                       
-* Get-SETemplate                  
-* Get-SEUser                      
-* Get-SEVault                     
-* Get-SEVaultList                 
-* Import-SEVaultEntries           
-* New-SEAPIKEY                    
-* New-SEAuthCacheToken            
-* New-SECustomer                  
-* New-SECustomerProperty          
-* New-SEGroup                     
-* New-SENote                      
-* New-SENotification              
-* New-SESensor                    
-* New-SETag                       
-* New-SEVault                     
-* New-SEVaultEntry                
-* Remove-SEConnector              
-* Remove-SEContainer              
-* Remove-SEManager                
-* Remove-SENote                   
-* Remove-SENotification           
-* Remove-SESensor                 
-* Remove-SESensorhub              
-* Remove-SETag                    
-* Remove-SEVault                  
-* Restart-SEContainer             
-* Restart-SEOCCConnector          
-* Restart-SESensor                
-* Restart-SESensorhub             
-* Set-SECustomerSetting           
-* Set-SEManager                   
-* Set-SENotification              
-* Set-SESensor                    
-* Set-SESensorSetting             
-* Set-SESensorState               
-* Set-SESensorTag                 
-* Set-SETag                       
-* Set-SETemplate                  
-* Test-SEAuth                     
-* Update-SEHelper                 
-* Update-SEVaultUser
-
-
+* Connect-SESession
+* Disconnect-SESession
+* Get-SECustomer
+* Get-SENotification
+* Get-SESensor
+* Get-SESensorState
+* Get-SESensorSetting
++ Set-SESensorSetting
+* Get-SESensorhub
+* Restart-SESensorhub
+* New-SENotification
 
 #### SeApi Namespace
 * Get-SeApiActionlogList
