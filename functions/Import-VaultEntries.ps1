@@ -46,7 +46,7 @@ function Import-VaultEntries {
         $AuthToken = Test-SEAuth -AuthToken $AuthToken
     }
     Process {
-        $content = Get-Content -Path $PathToCSV -Raw -Encoding utf8 
+        $content = Get-Content -Path $PathToCSV -Raw 
         $reqBody = @{  
             "headers"          = @{
                 "id"          = 0
@@ -64,7 +64,16 @@ function Import-VaultEntries {
             "removeAdditional" = $false
         }
         $url = "https://api-ms.server-eye.de/3/vault/$vaultID/entries/import"
-        Intern-PutJson -url $url -body $reqBody -authtoken $AuthToken
+        ##Intern-PutJson -url $url -body $reqBody -authtoken $AuthToken
+
+         $body = $reqBody | Remove-Null | ConvertTo-Json
+    if ($authtoken -is [string]) {
+        return (Invoke-RestMethod -Uri $url -Method Put -Body $body -ContentType "application/json; charset=utf-8" -Headers @{"x-api-key" = $authtoken } );
+    }
+    else {
+        return (Invoke-RestMethod -Uri $url -Method Put -Body $body -ContentType "application/json; charset=utf-8" -WebSession $authtoken );
+    }
+
 
     }
 
