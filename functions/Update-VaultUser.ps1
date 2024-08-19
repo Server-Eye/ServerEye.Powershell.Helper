@@ -51,7 +51,7 @@ function Update-VaultUser {
 
         $reqBody = @{  
             'role'  = $role
-            'token' = $token
+            'token' = $token.Token
         }
 
         
