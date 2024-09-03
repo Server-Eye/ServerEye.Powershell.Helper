@@ -19,7 +19,7 @@
     Either a session or an API key. If no AuthToken is provided the global Server-Eye session will be used if available.
     
 #>
-function New-Notification {
+ Function New-Notification {
     [CmdletBinding(DefaultParameterSetName="ofSensor")]
     Param(
         [parameter(ValueFromPipelineByPropertyName,ParameterSetName='ofSensor')]
@@ -46,6 +46,9 @@ function New-Notification {
         [Parameter(ValueFromPipelineByPropertyName,Mandatory=$false,ParameterSetName='ofSensor')]
         $AuthToken
     )
+
+
+
 
     Begin {
         $AuthToken = Test-SEAuth -AuthToken $AuthToken
@@ -85,9 +88,51 @@ function NewNotificationofSensor {
     [Parameter(Mandatory=$true)]
     $Authtoken
     )
+    if($deferid -ne $null){
+    
+    $noti = New-AgentNotificationWithoutDeferID -AuthToken $Authtoken -AId $sensorId -UserId $UserId -Email $SendEmail -Phone $SendTextmessage -Ticket $SendTicket
+    
+    }else{
+
     $noti = New-SeApiAgentNotification -AuthToken $Authtoken -AId $sensorId -UserId $UserId -Email $SendEmail -Phone $SendTextmessage -Ticket $SendTicket -deferid $deferid
+    }
     formatSensorNotificationNew -Authtoken $Authtoken -notiID $noti.id -sensorid $noti.parent_id
 }
+
+
+    function New-AgentNotificationWithoutDeferID {
+        [CmdletBinding()]
+        Param(
+            
+[Parameter(Mandatory=$true)]
+$AId,
+[Parameter(Mandatory=$true)]
+$UserId,
+[Parameter(Mandatory=$false)]
+$Email,
+[Parameter(Mandatory=$false)]
+$Phone,
+[Parameter(Mandatory=$false)]
+$Ticket,
+            [Parameter(Mandatory=$true)]
+            [alias("ApiKey","Session")]
+            $AuthToken
+        )
+        
+        
+        Process {
+            $reqBody = @{
+            
+            'aId' = $AId
+            'userId' = $UserId
+            'email' = $Email
+            'phone' = $Phone
+            'ticket' = $Ticket
+            }
+
+            return Intern-PostJson -url "https://api.server-eye.de/2/agent/$AId/notification" -authtoken $AuthToken -body $reqBody
+        }
+    }
 
 function formatSensorNotificationNew($notiID, $Authtoken, $SensorId){
     $n = Get-SENotification -SensorId  $SensorId -AuthToken $AuthToken | Where-Object {$_.NotificationId -eq $notiID}
@@ -173,6 +218,7 @@ function formatContainerNotificationNew($notiID, $authoken, $SensorhubID, $senso
         Customer = $customerName
     }
 }
+
 # SIG # Begin signature block
 # MIIkVQYJKoZIhvcNAQcCoIIkRjCCJEICAQExDzANBglghkgBZQMEAgEFADB5Bgor
 # BgEEAYI3AgEEoGswaTA0BgorBgEEAYI3AgEeMCYCAwEAAAQQH8w7YFlLCE63JNLG
