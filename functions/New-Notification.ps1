@@ -19,7 +19,7 @@
     Either a session or an API key. If no AuthToken is provided the global Server-Eye session will be used if available.
     
 #>
- Function New-Notification {
+ function New-Notification {
     [CmdletBinding(DefaultParameterSetName="ofSensor")]
     Param(
         [parameter(ValueFromPipelineByPropertyName,ParameterSetName='ofSensor')]
