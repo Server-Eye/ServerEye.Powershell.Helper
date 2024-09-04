@@ -88,7 +88,7 @@ function NewNotificationofSensor {
     [Parameter(Mandatory=$true)]
     $Authtoken
     )
-    if($deferid -ne $null){
+    if([string]::IsNullOrEmpty($deferid)){
     
     $noti = New-AgentNotificationWithoutDeferID -AuthToken $Authtoken -AId $sensorId -UserId $UserId -Email $SendEmail -Phone $SendTextmessage -Ticket $SendTicket
     
