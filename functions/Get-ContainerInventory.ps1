@@ -3,7 +3,7 @@
     Get the Inventory for a System.
 
     .DESCRIPTION
-    Get the Inventory for a System, shows CPU, RAM, HDD Name, HDD Capacity, HDD Free Space, OS and OS Procuktkey.
+    Get the Inventory for a System, shows CPU, RAM, HDD Name, HDD Capacity, HDD Free Space, OS and OS Productkey.
 
     .PARAMETER SensorhubId
     The sensorhub id for which the Inventory will be displayed.
@@ -33,14 +33,14 @@ function Get-ContainerInventory {
         $AuthToken = Test-SEAuth -AuthToken $AuthToken
     }
     Process {
-        formatInvetoryOfContainer -ContainerID $ContainerID -AuthToken $AuthToken
+        formatInventoryOfContainer -ContainerID $ContainerID -AuthToken $AuthToken
     }
     End {
         
     }
 }
 
-function formatInvetoryOfContainer ($ContainerID, $AuthToken) {
+function formatInventoryOfContainer ($ContainerID, $AuthToken) {
     $inventory = Get-SeApiContainerInventory -AuthToken $AuthToken -CId $ContainerID -Format json -ErrorAction SilentlyContinue
     $Container = Get-CachedContainer -ContainerID $ContainerID -AuthToken $AuthToken
     $Customer = Get-CachedCustomer -CustomerId $Container.customerId -AuthToken $AuthToken
@@ -49,6 +49,9 @@ function formatInvetoryOfContainer ($ContainerID, $AuthToken) {
             Customer        = $Customer.companyName
             "OCC Connector" = $Container.name
             "OCC ConnectorID" = $Container.cId
+            <#
+            TODO: Is this still needed? OCC-Connectors don't have inventory information anymore.
+
             BIOS = $inventory.BIOS
             CPU = $inventory.CPU
             DEVICES = $inventory.DEVICES
@@ -80,6 +83,7 @@ function formatInvetoryOfContainer ($ContainerID, $AuthToken) {
             SYSTEMSLOT = $inventory.SYSTEMSLOT
             TCPIP = $inventory.TCPIP
             TCPIP_ADAPTER = $inventory.TCPIP_ADAPTER    
+            #>
         }
     }
     else {
@@ -120,9 +124,9 @@ function formatInvetoryOfContainer ($ContainerID, $AuthToken) {
             SYSTEMSLOT = $inventory.SYSTEMSLOT
             TCPIP = $inventory.TCPIP
             TCPIP_ADAPTER = $inventory.TCPIP_ADAPTER
+            WIN_11_STATUS = $inventory.WIN_11_STATUS
         }
     }
-
 }
 # SIG # Begin signature block
 # MIIkVQYJKoZIhvcNAQcCoIIkRjCCJEICAQExDzANBglghkgBZQMEAgEFADB5Bgor
