@@ -49,41 +49,6 @@ function formatInventoryOfContainer ($ContainerID, $AuthToken) {
             Customer        = $Customer.companyName
             "OCC Connector" = $Container.name
             "OCC ConnectorID" = $Container.cId
-            <#
-            TODO: Is this still needed? OCC-Connectors don't have inventory information anymore.
-
-            BIOS = $inventory.BIOS
-            CPU = $inventory.CPU
-            DEVICES = $inventory.DEVICES
-            DISK = $inventory.DISK
-            DISPLAY = $inventory.DISPLAY
-            DISPLAYMODES = $inventory.DISPLAYMODES
-            ENGINES = $inventory.ENGINES
-            ENVIRONMENT = $inventory.ENVIRONMENT
-            LOCALGROUPS = $inventory.LOCALGROUPS
-            LOCALINFO = $inventory.LOCALINFO
-            LOCALUSER = $inventory.LOCALUSER
-            MACHINE = $inventory.MACHINE
-            MEMORY = $inventory.MEMORY
-            MEMORYDEVICE = $inventory.MEMORYDEVICE
-            MEMORYMODULE = $inventory.MEMORYMODULE
-            MONITOR = $inventory.MONITOR
-            MSPRODUKT = $inventory.MSPRODUKT
-            NTSHARE = $inventory.NTSHARE
-            ONBOARDDEVICE = $inventory.ONBOARDDEVICE
-            OS = $inventory.OS
-            OS_HOTFIX = $inventory.OS_HOTFIX
-            PORTSLOT = $inventory.PORTSLOT
-            PRINTER = $inventory.PRINTER
-            PROGRAMS = $inventory.PROGRAMS
-            STARTUP = $inventory.STARTUP
-            STORAGE = $inventory.STORAGE
-            STORAGEDEVICE = $inventory.STORAGEDEVICE
-            SYSTEM = $inventory.System
-            SYSTEMSLOT = $inventory.SYSTEMSLOT
-            TCPIP = $inventory.TCPIP
-            TCPIP_ADAPTER = $inventory.TCPIP_ADAPTER    
-            #>
         }
     }
     else {
