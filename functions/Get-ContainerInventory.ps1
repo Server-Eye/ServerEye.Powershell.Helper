@@ -3,7 +3,7 @@
     Get the Inventory for a System.
 
     .DESCRIPTION
-    Get the Inventory for a System, shows CPU, RAM, HDD Name, HDD Capacity, HDD Free Space, OS and OS Procuktkey.
+    Get the Inventory for a System, shows CPU, RAM, HDD Name, HDD Capacity, HDD Free Space, OS and OS Productkey.
 
     .PARAMETER SensorhubId
     The sensorhub id for which the Inventory will be displayed.
@@ -33,14 +33,14 @@ function Get-ContainerInventory {
         $AuthToken = Test-SEAuth -AuthToken $AuthToken
     }
     Process {
-        formatInvetoryOfContainer -ContainerID $ContainerID -AuthToken $AuthToken
+        formatInventoryOfContainer -ContainerID $ContainerID -AuthToken $AuthToken
     }
     End {
         
     }
 }
 
-function formatInvetoryOfContainer ($ContainerID, $AuthToken) {
+function formatInventoryOfContainer ($ContainerID, $AuthToken) {
     $inventory = Get-SeApiContainerInventory -AuthToken $AuthToken -CId $ContainerID -Format json -ErrorAction SilentlyContinue
     $Container = Get-CachedContainer -ContainerID $ContainerID -AuthToken $AuthToken
     $Customer = Get-CachedCustomer -CustomerId $Container.customerId -AuthToken $AuthToken
@@ -49,37 +49,6 @@ function formatInvetoryOfContainer ($ContainerID, $AuthToken) {
             Customer        = $Customer.companyName
             "OCC Connector" = $Container.name
             "OCC ConnectorID" = $Container.cId
-            BIOS = $inventory.BIOS
-            CPU = $inventory.CPU
-            DEVICES = $inventory.DEVICES
-            DISK = $inventory.DISK
-            DISPLAY = $inventory.DISPLAY
-            DISPLAYMODES = $inventory.DISPLAYMODES
-            ENGINES = $inventory.ENGINES
-            ENVIRONMENT = $inventory.ENVIRONMENT
-            LOCALGROUPS = $inventory.LOCALGROUPS
-            LOCALINFO = $inventory.LOCALINFO
-            LOCALUSER = $inventory.LOCALUSER
-            MACHINE = $inventory.MACHINE
-            MEMORY = $inventory.MEMORY
-            MEMORYDEVICE = $inventory.MEMORYDEVICE
-            MEMORYMODULE = $inventory.MEMORYMODULE
-            MONITOR = $inventory.MONITOR
-            MSPRODUKT = $inventory.MSPRODUKT
-            NTSHARE = $inventory.NTSHARE
-            ONBOARDDEVICE = $inventory.ONBOARDDEVICE
-            OS = $inventory.OS
-            OS_HOTFIX = $inventory.OS_HOTFIX
-            PORTSLOT = $inventory.PORTSLOT
-            PRINTER = $inventory.PRINTER
-            PROGRAMS = $inventory.PROGRAMS
-            STARTUP = $inventory.STARTUP
-            STORAGE = $inventory.STORAGE
-            STORAGEDEVICE = $inventory.STORAGEDEVICE
-            SYSTEM = $inventory.System
-            SYSTEMSLOT = $inventory.SYSTEMSLOT
-            TCPIP = $inventory.TCPIP
-            TCPIP_ADAPTER = $inventory.TCPIP_ADAPTER    
         }
     }
     else {
@@ -120,9 +89,9 @@ function formatInvetoryOfContainer ($ContainerID, $AuthToken) {
             SYSTEMSLOT = $inventory.SYSTEMSLOT
             TCPIP = $inventory.TCPIP
             TCPIP_ADAPTER = $inventory.TCPIP_ADAPTER
+            WIN_11_STATUS = $inventory.WIN_11_STATUS
         }
     }
-
 }
 # SIG # Begin signature block
 # MIIkVQYJKoZIhvcNAQcCoIIkRjCCJEICAQExDzANBglghkgBZQMEAgEFADB5Bgor
