@@ -27,7 +27,7 @@ function Get-Vault {
         $AuthToken = Test-SEAuth -AuthToken $AuthToken
     }
     Process {
-        $url = "https://api-ms.server-eye.de/3/vault/$VaultID "
+        $url = "https://api.server-eye.de/3/vault/$VaultID "
 
         $result = Intern-GetJson -url $url -authtoken $AuthToken
         $TypeName = if ($Result.distributorId) { 

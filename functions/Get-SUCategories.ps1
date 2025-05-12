@@ -23,7 +23,7 @@ function Get-SUCategories {
 
         [Collections.Generic.List[string]]$categories = @()
 
-        $response = Invoke-RestMethod -Uri "https://api-ms.server-eye.de/3/smart-updates/categories" -Method Get -WebSession $authtoken
+        $response = Invoke-RestMethod -Uri "https://api.server-eye.de/3/smart-updates/categories" -Method Get -WebSession $authtoken
         
         foreach ( $categorie in $response )
         {

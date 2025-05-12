@@ -42,7 +42,7 @@ function Update-VaultUser {
 
     begin {
         $AuthToken = Test-SEAuth -AuthToken $AuthToken
-        $base = "https://api-ms.server-eye.de/3"
+        $base = "https://api.server-eye.de/3"
         if ($null -eq $token) {
             $token = New-SEAuthCacheToken
         }

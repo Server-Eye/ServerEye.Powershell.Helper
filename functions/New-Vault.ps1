@@ -86,7 +86,7 @@ function New-Vault {
 
         }
 
-        $url = "https://api-ms.server-eye.de/3/vault"
+        $url = "https://api.server-eye.de/3/vault"
 
         $Result = Intern-PostJson -url $url -body $reqBody -authtoken $AuthToken
 
