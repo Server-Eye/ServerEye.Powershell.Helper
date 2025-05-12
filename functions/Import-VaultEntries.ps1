@@ -63,7 +63,7 @@ function Import-VaultEntries {
             "noHeader"         = $false
             "removeAdditional" = $false
         }
-        $url = "https://api-ms.server-eye.de/3/vault/$vaultID/entries/import"
+        $url = "https://api.server-eye.de/3/vault/$vaultID/entries/import"
         ##Intern-PutJson -url $url -body $reqBody -authtoken $AuthToken
 
          $body = $reqBody | Remove-Null | ConvertTo-Json

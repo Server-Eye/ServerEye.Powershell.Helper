@@ -43,7 +43,7 @@ function Get-VaultList {
             'filter'     = $Filter
         }
 
-        $url = "https://api-ms.server-eye.de/3/vault"
+        $url = "https://api.server-eye.de/3/vault"
 
         $Results = Intern-GetJson -url $url  -body $reqBody -authtoken $AuthToken
 

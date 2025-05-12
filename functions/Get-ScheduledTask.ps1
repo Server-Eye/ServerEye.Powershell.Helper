@@ -36,7 +36,7 @@ function Get-ScheduledTask {
 
     begin {
         $AuthToken = Test-SEAuth -AuthToken $AuthToken
-        $urlbase = "https://api-ms.server-eye.de/3"
+        $urlbase = "https://api.server-eye.de/3"
         if (!(Get-Typedata "ServerEye.ScheduledTask")) {
             $SECustomerTypeData = @{
                 TypeName                  = "ServerEye.ScheduledTask"
