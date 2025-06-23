@@ -27,7 +27,7 @@ function Get-Agenttype {
         $AuthToken
     )
     Begin{
-        $AuthToken = Test-Auth -AuthToken $AuthToken
+        $AuthToken = Test-SEAuth -AuthToken $AuthToken
     }
     
     Process {

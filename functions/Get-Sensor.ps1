@@ -50,9 +50,17 @@ function Get-Sensor {
         if (!$Global:ServerEyeAgents) {
             $Global:ServerEyeAgents = @()
         }
+	if (!$Global:ServerEyeSensorTypes) {
+             $Global:ServerEyeSensorTypes = @{}
+             $agenttypeList = Get-Agenttype -AuthToken $AuthToken
+             foreach ($agent in $agenttypeList) {
+                 $Global:ServerEyeSensorTypes[$agent.AgentTypeID] = $agent
+             }
+        }
     }
     
     Process {
+	
         if ($SensorhubId) {
             Write-Debug "SensorhubID will be used $SensorhubId"
             getSensorBySensorhub -sensorhubId $SensorhubId -filter $Filter -auth $AuthToken
@@ -65,7 +73,7 @@ function Get-Sensor {
             Write-Debug "SensorType will be used $Sensortype"
             $agents = $agentList | Where-Object { $_.agentType -eq $SensorType }
             foreach ($agent in $agents) {
-                formatSensorByType -auth $authtoken -agent $agent
+                formatSensorByType -auth $AuthToken -agent $agent 
             }
         } 
         else {
@@ -95,7 +103,7 @@ function getSensorById ($sensorId, $auth) {
 }
 function formatSensor($sensor, $sensorhub, $agentlist, $auth) {
     $Global:ServerEyeAgents += $sensor
-    $type = $Global:ServerEyeSensorTypes.Get_Item($sensor.type)
+    $type = $Global:ServerEyeSensorTypes[$sensor.type]
     $notification = $agentList | Where-Object { $_.id -eq $sensor.aId }
     $MAC = Get-CachedContainer -AuthToken $auth -ContainerID $sensorhub.parentID
     $customer = Get-CachedCustomer -AuthToken $auth -CustomerId $sensorhub.CustomerId
@@ -119,14 +127,14 @@ function formatSensor($sensor, $sensorhub, $agentlist, $auth) {
 }
 
 function formatSensorByType($auth, $agent) {
-    $type = $Global:ServerEyeSensorTypes.Get_Item($agent.agentType)
+    $type = $Global:ServerEyeSensorTypes[$agent.agentType]
     $sensorhub = Get-CachedContainer -ContainerID $agent.parentId -AuthToken $auth
     $MAC = Get-CachedContainer -AuthToken $auth -ContainerID $sensorhub.parentID
     $customer = Get-CachedCustomer -AuthToken $auth -CustomerId $sensorhub.CustomerId
     $SESensor = [PSCustomObject]@{
         Name            = $agent.name
-        SensorType      = $type.defaultName
-        SensorTypeID    = $type.agentType
+        SensorType      = $type.Agenttype
+        SensorTypeID    = $type.AgentTypeID
         SensorId        = $agent.Id
         Error           = $agent.state
         HasNotification = $agent.hasNotification
@@ -171,6 +179,8 @@ function filterMSG($message){
         return $message
     }
 }
+
+
 # SIG # Begin signature block
 # MIIkVQYJKoZIhvcNAQcCoIIkRjCCJEICAQExDzANBglghkgBZQMEAgEFADB5Bgor
 # BgEEAYI3AgEEoGswaTA0BgorBgEEAYI3AgEeMCYCAwEAAAQQH8w7YFlLCE63JNLG
