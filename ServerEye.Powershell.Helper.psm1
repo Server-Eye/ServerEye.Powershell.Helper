@@ -136,7 +136,7 @@ function Get-CachedCustomer {
 function Delete-SECache {
  	[CmdletBinding()]
 	Param(
-        	[parameter(Mandatory = $false)]
+        	[parameter(Mandatory = $true)]
         	$AuthToken
     	)
 	
