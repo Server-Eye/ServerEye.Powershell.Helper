@@ -133,6 +133,20 @@ function Get-CachedCustomer {
     }
 }
 
+function Delete-SECache {
+ 	[CmdletBinding()]
+	Param(
+        [parameter(Mandatory = $true)]
+        $AuthToken
+    )
+    $AuthToken = Test-SEAuth -AuthToken $AuthToken
+    $Global:ServerEyeAgent = @()
+    $Global:ServerEyeSensorTypes = @{}
+    $Global:ServerEyeCustomer = @()
+    Write-Host "Cache deleted"
+        
+}
+
 function Get-CachedAgent {
     [CmdletBinding()]
     Param(
