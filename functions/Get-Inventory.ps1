@@ -28,7 +28,7 @@
     Office Key        :
 
     .LINK 
-    https://api.server-eye.de/docs/2/
+    https://api.server-eye.de/3/docs/#/
     
 #>
 
@@ -45,19 +45,18 @@ function Get-Inventory {
     }
     Process {
         if ($SensorhubId) {
-            formatInvetoryBySensorhub -SensorhubID $SensorhubId -Auth $AuthToken
+            formatInventoryBySensorhub -SensorhubID $SensorhubId -Auth $AuthToken
         }
-        
     }
     End {
         
     }
 }
 
+function formatInventoryBySensorhub ($SensorhubId, $auth) {
 
-function formatInvetoryBySensorhub ($SensorhubId, $auth) {
-    $inventory = Get-SeApiContainerInventory -AuthToken $Auth -CId $SensorhubId -Format json -ErrorAction SilentlyContinue -ErrorVariable x
-    $sensorhub = Get-SESensorhub -SensorhubID $Sensorhubid -AuthToken $Auth
+    $inventory = getContainerInventory -SensorhubID $SensorhubId -AuthToken $auth
+    $sensorhub = Get-SESensorhub -SensorhubID $SensorhubId -AuthToken $auth
     [PSCustomObject]@{
         Customer        = $sensorhub.Customer
         "OCC Connector" = $sensorhub."OCC-Connector"
@@ -68,11 +67,21 @@ function formatInvetoryBySensorhub ($SensorhubId, $auth) {
         "HDD Capacity (GB)" = ($inventory.DISK | Where-Object {$_.Filesystem -eq "NTFS"}) | ForEach-Object -Process {[math]::round(([int]($_.Capacity)/1024),2)}
         "HDD Free (GB)" = ($inventory.DISK | Where-Object {$_.Filesystem -eq "NTFS"}) | ForEach-Object -Process {[math]::round(([int]($_.FREESPACE)/1024),2)}
         OS              = $inventory.OS.OSName | Select-Object -Unique
-        "OS Procuktkey" = $inventory.OS.PRODUCTKEY | Select-Object -Unique
+        "OS Product Key" = $inventory.OS.PRODUCTKEY | Select-Object -Unique
         Office          = ($inventory.MSPRODUKT | Where-Object { $_.ProduktName -like "Microsoft Office*"} | Select-Object -Unique).produktName
         "Office Key "   = ($inventory.MSPRODUKT | Where-Object { $_.ProduktName -like "Microsoft Office*"} | Select-Object -Unique).PRODUKTKEY
     }
 }
+
+function getContainerInventory($SensorhubId, $AuthToken) {
+    $url = "https://api.server-eye.de/3/container/$SensorhubId/inventory?format=json"
+    if ($AuthToken -is [string]) {
+        return (Invoke-RestMethod -Uri $url -Method Get -Headers @{"x-api-key"=$AuthToken} );
+    } else {
+        return (Invoke-RestMethod -Uri $url -Method Get -WebSession $AuthToken );
+    }
+}
+
 # SIG # Begin signature block
 # MIIkVQYJKoZIhvcNAQcCoIIkRjCCJEICAQExDzANBglghkgBZQMEAgEFADB5Bgor
 # BgEEAYI3AgEEoGswaTA0BgorBgEEAYI3AgEeMCYCAwEAAAQQH8w7YFlLCE63JNLG
