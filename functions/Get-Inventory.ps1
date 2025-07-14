@@ -55,7 +55,7 @@ function Get-Inventory {
 
 function formatInventoryBySensorhub ($SensorhubId, $auth) {
 
-    $inventory = getContainerInventory -SensorhubID $SensorhubId -AuthToken $auth
+    $inventory = getContainerInventory -SensorhubID $SensorhubId -AuthToken $auth -ErrorAction SilentlyContinue -ErrorVariable x
     $sensorhub = Get-SESensorhub -SensorhubID $SensorhubId -AuthToken $auth
     [PSCustomObject]@{
         Customer        = $sensorhub.Customer
