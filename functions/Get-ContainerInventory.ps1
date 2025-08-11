@@ -16,7 +16,7 @@
 
 
     .LINK 
-    https://api.server-eye.de/docs/2/
+    https://api.server-eye.de/3/docs/#/
     
 #>
 
@@ -36,12 +36,11 @@ function Get-ContainerInventory {
         formatInventoryOfContainer -ContainerID $ContainerID -AuthToken $AuthToken
     }
     End {
-        
     }
 }
 
 function formatInventoryOfContainer ($ContainerID, $AuthToken) {
-    $inventory = Get-SeApiContainerInventory -AuthToken $AuthToken -CId $ContainerID -Format json -ErrorAction SilentlyContinue
+    $inventory = getContainerInventory -ContainerID $ContainerID -AuthToken $AuthToken -ErrorAction SilentlyContinue
     $Container = Get-CachedContainer -ContainerID $ContainerID -AuthToken $AuthToken
     $Customer = Get-CachedCustomer -CustomerId $Container.customerId -AuthToken $AuthToken
     if ($Container.type -eq 0) {
@@ -91,6 +90,15 @@ function formatInventoryOfContainer ($ContainerID, $AuthToken) {
             TCPIP_ADAPTER = $inventory.TCPIP_ADAPTER
             WIN_11_STATUS = $inventory.WIN_11_STATUS
         }
+    }
+}
+
+function getContainerInventory($ContainerID, $AuthToken) {
+    $url = "https://api.server-eye.de/3/container/$ContainerID/inventory?format=json"
+    if ($AuthToken -is [string]) {
+        return (Invoke-RestMethod -Uri $url -Method Get -Headers @{"x-api-key"=$AuthToken} );
+    } else {
+        return (Invoke-RestMethod -Uri $url -Method Get -WebSession $AuthToken );
     }
 }
 # SIG # Begin signature block
