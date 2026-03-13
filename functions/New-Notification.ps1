@@ -175,7 +175,13 @@ function NewNotificationofContainer {
         [Parameter(Mandatory=$true)]
         $Authtoken
         )
-    $noti = New-SeApiContainerNotification -AuthToken $Authtoken -CId $SensorhubID -UserId $UserId -Email $SendEmail -Phone $SendTextmessage -Ticket $SendTicket -deferid $deferid
+
+    if ([string]::IsNullOrEmpty($deferid)) {
+        $noti = New-SeApiContainerNotification -AuthToken $Authtoken -CId $SensorhubID -UserId $UserId -Email $SendEmail -Phone $SendTextmessage -Ticket $SendTicket
+    } else {
+        $noti = New-SeApiContainerNotification -AuthToken $Authtoken -CId $SensorhubID -UserId $UserId -Email $SendEmail -Phone $SendTextmessage -Ticket $SendTicket -deferid $deferid
+    }
+
     $container = Get-SeApiContainer -AuthToken $Authtoken -CId $SensorhubID
 
     $sensorhubName = ""
